@@ -4,9 +4,11 @@ import com.dcifuentes.test.springboot.app.models.Banco;
 import com.dcifuentes.test.springboot.app.models.Cuenta;
 import com.dcifuentes.test.springboot.app.repositories.BancoRepository;
 import com.dcifuentes.test.springboot.app.repositories.CuentaRepository;
+import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 
+@Service
 public class CuentaServiceImpl implements CuentaService{
     private CuentaRepository cuentaRepository;
     private BancoRepository bancoRepository;
@@ -34,12 +36,8 @@ public class CuentaServiceImpl implements CuentaService{
     }
 
     @Override
-    public void transferir(Long numCuentaOrigen, Long numCuentaDestino, BigDecimal monto) {
-        Banco banco = bancoRepository.findById(1L);
-        int totalTransferencias = banco.getTotalTransferencias();
-        banco.setTotalTransferencias(++totalTransferencias);
-        bancoRepository.update(banco);
-
+    public void transferir(Long numCuentaOrigen, Long numCuentaDestino, BigDecimal monto,
+                           Long bancoId) {
         Cuenta cuentaOrigen = cuentaRepository.findById(numCuentaOrigen);
         cuentaOrigen.debito(monto);
         cuentaRepository.update(cuentaOrigen);
@@ -47,5 +45,10 @@ public class CuentaServiceImpl implements CuentaService{
         Cuenta cuentaDestino = cuentaRepository.findById(numCuentaDestino);
         cuentaDestino.credito(monto);
         cuentaRepository.update(cuentaDestino);
+
+        Banco banco = bancoRepository.findById(bancoId);
+        int totalTransferencias = banco.getTotalTransferencias();
+        banco.setTotalTransferencias(++totalTransferencias);
+        bancoRepository.update(banco);
     }
 }
