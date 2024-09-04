@@ -1,6 +1,7 @@
 package com.dcifuentes.test.springboot.app.models;
 
 import com.dcifuentes.test.springboot.app.exceptions.DineroInsuficienteException;
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,8 +13,14 @@ import java.util.Objects;
 @Getter
 @Setter
 @NoArgsConstructor
+@Entity
+@Table(name = "cuentas")
 public class Cuenta {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String persona;
     private BigDecimal saldo;
 
